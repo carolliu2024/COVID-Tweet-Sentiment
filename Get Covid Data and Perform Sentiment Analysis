@@ -1,0 +1,92 @@
+from datetime import datetime, timedelta
+import pandas as pd
+
+def fetch_url(date):
+    DATA_URL = ("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/"
+                    "csse_covid_19_daily_reports_us/{}.csv".format(date.date().strftime("%m-%d-%Y")))
+
+    return DATA_URL
+
+
+def load_data(DATA_URL, nrows=None):
+    df = pd.read_csv(DATA_URL, nrows=nrows)
+
+    return df
+
+date = datetime.today()
+df = None
+df_previous_week = None
+while True:
+    try:
+        df = load_data(fetch_url(date))
+        print(fetch_url(date))
+    except Exception as e:
+        date = date - timedelta(days=1)
+        continue
+    break
+
+date_early =  date - timedelta(days=14)
+date_previous = date - timedelta(days=7)
+df_early = load_data(fetch_url(date_early))
+df_previous_week = load_data(fetch_url(date_previous))
+total_new_cases = 0
+total_cases_prev_week = 0
+total_early_cases = 0
+for row in df.Confirmed:
+    total_new_cases += row
+
+for row in df_previous_week.Confirmed:
+    total_cases_prev_week += row
+
+for row in df_early.Confirmed:
+    total_early_cases += row
+
+print ("New cases in the last week: " + str(total_new_cases-total_cases_prev_week))
+print ("New cases in the second to last week: " + str(total_cases_prev_week-total_early_cases))
+print(str(round((total_new_cases-total_cases_prev_week)/(total_cases_prev_week-total_early_cases)*100 -100,2)) + " percent change in cases this week")
+
+import pandas as pd
+from sqlalchemy import all_
+import text2emotion as te
+import csv
+
+
+
+#Covid Tweets CSV
+data= pd.read_csv(r"C:\Users\alexa\OneDrive\Desktop\covid-tweets1.csv")
+sum_happy = 0
+sum_angry = 0
+sum_surprise = 0
+sum_sad= 0
+sum_fear = 0
+count = 0
+
+sum_happy_weighted = 0
+sum_angry_weighted = 0
+sum_surprise_weighted = 0
+sum_sad_weighted= 0
+sum_fear_weighted = 0
+current_row =0
+total_likes = 0
+
+for row in data.Text:
+    all_emotions_values = te.get_emotion(row)
+    if all_emotions_values['Happy'] != 0 or all_emotions_values['Angry'] !=0 or all_emotions_values['Surprise'] != 0 or all_emotions_values['Sad'] != 0 or all_emotions_values['Fear'] != 0 :
+        sum_happy += all_emotions_values['Happy']
+        sum_angry += all_emotions_values['Angry']
+        sum_surprise += all_emotions_values['Surprise']
+        sum_sad += all_emotions_values['Sad']
+        sum_fear += all_emotions_values['Fear']
+        sum_happy_weighted += (all_emotions_values['Happy'] * (data.Like_Count[current_row] + 1))
+        sum_angry_weighted += (all_emotions_values['Angry'] * (data.Like_Count[current_row] + 1))
+        sum_surprise_weighted += (all_emotions_values['Surprise'] * (data.Like_Count[current_row]+1))
+        sum_sad_weighted += (all_emotions_values['Sad'] * (data.Like_Count[current_row]+1))
+        sum_fear_weighted += (all_emotions_values['Fear'] * (data.Like_Count[current_row]+1))
+        total_likes += (data.Like_Count[current_row] + 1)
+        count = count + 1
+    current_row += 1
+results = {'Happy': round(sum_happy/count,2), 'Angry': round(sum_angry/count,2), 'Surprise': round(sum_surprise/count,2), 'Sad': round(sum_sad/count,2), 'Fear': round(sum_fear/count,2)}
+print("Results for Unweighted Covid-Tweets: " + str(results))
+
+results1 = {'Happy': round(sum_happy_weighted/total_likes,2), 'Angry': round(sum_angry_weighted/total_likes,2), 'Surprise': round(sum_surprise_weighted/total_likes,2), 'Sad': round(sum_sad_weighted/total_likes,2), 'Fear': round(sum_fear_weighted/total_likes,2)}
+print("Results for Weighted Covid-Tweets: " + str(results1))
