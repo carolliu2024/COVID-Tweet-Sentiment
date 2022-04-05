@@ -8,6 +8,6 @@ app.listen(3000, function() {
 
 // Make server send html page to browser
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/chloro_map_ex.html')
+    res.sendFile(__dirname + '/Map/chloro_map_ex.html')
   })
 
