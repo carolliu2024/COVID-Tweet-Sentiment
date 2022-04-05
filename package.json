@@ -11,5 +11,13 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.3"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/carolliu2024/COVID-Tweet-Sentiment.git"
+  },
+  "bugs": {
+    "url": "https://github.com/carolliu2024/COVID-Tweet-Sentiment/issues"
+  },
+  "homepage": "https://github.com/carolliu2024/COVID-Tweet-Sentiment#readme"
 }
