@@ -1,0 +1,40 @@
+# Imports
+import snscrape.modules.twitter as sntwitter
+import pandas as pd
+from datetime import timedelta, date, datetime
+#pip uninstall snscrape
+# pip install==0.4.2.20211215
+# We cant use the latest version or there will be errors
+
+
+covid_list = []
+
+start_date = date(2020, 1, 1)
+next_date = date(2020, 1, 2)
+end_date = datetime.today() 
+delta = timedelta(days=1)
+j = 1
+
+while start_date <= end_date.date():
+    print(start_date)
+
+    for i,tweet in enumerate(sntwitter.TwitterSearchScraper('covid OR covid-19 OR covid 19 OR corona OR coronavirus OR virus since:{} until:{} near:"Chicago" within:100km'.format(start_date, next_date)).get_items()):
+        try:
+            covid_list.append([tweet.date, tweet.user.location,tweet.content, tweet.likeCount])
+    
+        except Exception:
+            pass
+    start_date += delta
+    next_date += delta
+
+tweets_df = pd.DataFrame(covid_list, columns=['Datetime', 'Location', 'Text', 'Like Count'])
+print(tweets_df)
+
+    
+# Display first 5 entries from dataframe
+# tweets_df.head()
+
+# Export dataframe into a CSV
+'''
+tweets_df.to_csv('covid-tweets.csv', sep=',', index=False)
+'''
