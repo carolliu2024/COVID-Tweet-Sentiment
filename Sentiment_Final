@@ -1,0 +1,42 @@
+from datetime import datetime, timedelta
+import pandas as pd
+import pandas as pd
+from sqlalchemy import all_
+import text2emotion as te
+import csv
+
+
+
+#Covid Tweets CSV
+data= pd.read_csv("https://raw.githubusercontent.com/carolliu2024/COVID-Tweet-Sentiment/main/CSVs%20for%20States/New%20Jersey-covid-tweets-.csv", lineterminator='\n')
+length = len(data)
+data.columns = data.columns.str.replace(' ', '_')
+sum_happy = 0
+sum_angry = 0
+sum_surprise = 0
+sum_sad= 0
+sum_fear = 0
+count = 0
+
+sum_happy_weighted = 0
+sum_angry_weighted = 0
+sum_surprise_weighted = 0
+sum_sad_weighted= 0
+sum_fear_weighted = 0
+current_row =0
+total_likes = 0
+
+for row in data.Text:
+    all_emotions_values = te.get_emotion(row)
+    if all_emotions_values['Happy'] != 0 or all_emotions_values['Angry'] !=0 or all_emotions_values['Surprise'] != 0 or all_emotions_values['Sad'] != 0 or all_emotions_values['Fear'] != 0 :
+        sum_happy_weighted += (all_emotions_values['Happy'] * (data.Like_Count[current_row] + 1))
+        sum_angry_weighted += (all_emotions_values['Angry'] * (data.Like_Count[current_row] + 1))
+        sum_surprise_weighted += (all_emotions_values['Surprise'] * (data.Like_Count[current_row]+1))
+        sum_sad_weighted += (all_emotions_values['Sad'] * (data.Like_Count[current_row]+1))
+        sum_fear_weighted += (all_emotions_values['Fear'] * (data.Like_Count[current_row]+1))
+        total_likes += (data.Like_Count[current_row] + 1)
+    current_row += 1
+    print (str(round(current_row/length*100,2)) + "%")
+
+results1 = {'Happy': round(sum_happy_weighted/total_likes,3) * 100, 'Angry': round(sum_angry_weighted/total_likes,3) * 100, 'Surprise': round(sum_surprise_weighted/total_likes,3) * 100, 'Sad': round(sum_sad_weighted/total_likes,3) * 100, 'Fear': round(sum_fear_weighted/total_likes,3)* 100}
+print("Results for Weighted Covid-Tweets: " + str(results1))
