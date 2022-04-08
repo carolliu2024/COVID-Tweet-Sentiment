@@ -1,0 +1,23 @@
+{
+  "name": "covid-tweet-sentiment",
+  "version": "1.0.0",
+  "description": "Sentiment analysis of COVID-19 tweets",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/carolliu2024/COVID-Tweet-Sentiment.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/carolliu2024/COVID-Tweet-Sentiment/issues"
+  },
+  "homepage": "https://github.com/carolliu2024/COVID-Tweet-Sentiment#readme",
+  "dependencies": {
+    "express": "^4.17.3"
+  }
+}
