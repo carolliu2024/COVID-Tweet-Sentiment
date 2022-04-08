@@ -1,5 +1,4 @@
 # %%
-import antigravity
 import matplotlib.pyplot as plt
 import geopandas
 import pandas as pd
@@ -31,8 +30,16 @@ df = pd.read_excel('data\Sentiment-19_State_Data.xlsx')
 #df = pd.read_excel('covid_confirmed_usafacts.xlsx')
 df.head()
 
+# %%
+# Renaming files
+map_data = states.rename(index=str, columns={"NAME": "Name"})
+map_data.head() # Check renaming worked
+
 # %% Merge states Geodata with dataset
-merged = states.set_index('NAME').join(df.set_index('State'))
+#merged = states.set_index('NAME').join(df.set_index('State'))
+
+merged = map_data.join(df.set_index('State'), on='Name')
+#merged = states.set_index('Name').join(df.set_index('State'))
 merged.head()
 
 # %% Matplotlib prep work for Mapping
@@ -40,7 +47,8 @@ merged.head()
 #  Set variables to map
 
 # Dominant emotions: Happy, angry, surprise, sad, fear
-happy = merged[merged['Dominant Emotion'] == 'Happy']
+# Get states with dominant emotion as happy,angry,etc
+happy = merged[merged['Dominant Emotion'] == 'Happy'] 
 angry = merged[merged['Dominant Emotion'] == 'Angry']
 surprise = merged[merged['Dominant Emotion'] == 'Surprise']
 sad = merged[merged['Dominant Emotion'] == 'Sad']
@@ -48,16 +56,54 @@ fear = merged[merged['Dominant Emotion'] == 'Fear']
 
 #%% Create Map
 
-sent_map = merged.explore()
+# Display dominant emotion too?
+merged.explore(tooltip=['Name',
+                        'Happy', 
+                        'Angry', 
+                        'Surprise', 
+                        'Sad', 
+                        'Fear'])
 
+senti_map = merged.explore(tooltip=['Name',
+                                    'Happy', 
+                                    'Angry', 
+                                    'Surprise', 
+                                    'Sad', 
+                                    'Fear'],
+                         style_kwds = dict(fill=False))
 # merged.explore(column = var,
 #                cmap = 'plasma', 
 #                scheme = 'EqualInterval') 
-# ax.set_title('Total Covid Cases as of 3/10/22')
 
 # %%
-# Messy Colorbar labels 
-# merged.explore(column = var,
-#                cmap = 'plasma')
-
+fear.explore(column = 'Fear', 
+            cmap = 'Reds', 
+            m = senti_map,
+            tooltip=['Name',
+                    'Happy', 
+                    'Angry', 
+                    'Surprise', 
+                    'Sad', 
+                    'Fear'],
+            scheme = 'NaturalBreaks')
+sad.explore(column = 'Sad', 
+            cmap = 'Blues', 
+            m = senti_map,
+            tooltip=['Name',
+                    'Happy', 
+                    'Angry', 
+                    'Surprise', 
+                    'Sad', 
+                    'Fear'],
+            scheme = 'NaturalBreaks')
+surprise.explore(column = 'Surprise', 
+            cmap = 'Oranges', 
+            m = senti_map,
+            tooltip=['Name',
+                    'Happy', 
+                    'Angry', 
+                    'Surprise', 
+                    'Sad', 
+                    'Fear'],
+            scheme = 'NaturalBreaks')
 # %%
