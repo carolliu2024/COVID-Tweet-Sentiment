@@ -4,11 +4,12 @@ import pandas as pd
 from sqlalchemy import all_
 import text2emotion as te
 import csv
+import math
 
 
 
 #Covid Tweets CSV
-data= pd.read_csv("https://raw.githubusercontent.com/carolliu2024/COVID-Tweet-Sentiment/main/CSVs%20for%20States/New%20Jersey-covid-tweets-.csv", lineterminator='\n')
+data= pd.read_csv("https://raw.githubusercontent.com/carolliu2024/COVID-Tweet-Sentiment/main/CSVs%20for%20States/Oregon-covid-tweets-.csv")
 length = len(data)
 data.columns = data.columns.str.replace(' ', '_')
 sum_happy = 0
@@ -27,7 +28,16 @@ current_row =0
 total_likes = 0
 
 for row in data.Text:
+    if type(row) != str:
+        continue
     all_emotions_values = te.get_emotion(row)
+    n1=math.isnan(all_emotions_values['Happy'])
+    n2=math.isnan(all_emotions_values['Angry'])
+    n3=math.isnan(all_emotions_values['Surprise'])
+    n4=math.isnan(all_emotions_values['Sad'])
+    n5=math.isnan(all_emotions_values['Fear'])
+    if n1 or n2 or n3 or n4 or n5:
+        continue
     if all_emotions_values['Happy'] != 0 or all_emotions_values['Angry'] !=0 or all_emotions_values['Surprise'] != 0 or all_emotions_values['Sad'] != 0 or all_emotions_values['Fear'] != 0 :
         sum_happy_weighted += (all_emotions_values['Happy'] * (data.Like_Count[current_row] + 1))
         sum_angry_weighted += (all_emotions_values['Angry'] * (data.Like_Count[current_row] + 1))
