@@ -85,7 +85,7 @@ fear.explore(column = 'Fear',
                     'Surprise', 
                     'Sad', 
                     'Fear'],
-            scheme = 'NaturalBreaks')
+                    scheme='BoxPlot')
 sad.explore(column = 'Sad', 
             cmap = 'Blues', 
             m = senti_map,
@@ -95,9 +95,9 @@ sad.explore(column = 'Sad',
                     'Surprise', 
                     'Sad', 
                     'Fear'],
-            scheme = 'NaturalBreaks')
+                    scheme='BoxPlot')
 surprise.explore(column = 'Surprise', 
-            cmap = 'Oranges', 
+            cmap = 'Greens', 
             m = senti_map,
             tooltip=['Name',
                     'Happy', 
@@ -105,5 +105,8 @@ surprise.explore(column = 'Surprise',
                     'Surprise', 
                     'Sad', 
                     'Fear'],
-            scheme = 'NaturalBreaks')
+                    scheme='BoxPlot')
+
+# %%
+senti_map.save('senti_map.html')
 # %%
