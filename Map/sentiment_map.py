@@ -76,16 +76,6 @@ senti_map = merged.explore(tooltip=['Name',
 #                scheme = 'EqualInterval') 
 
 # %%
-fear.explore(column = 'Fear', 
-            cmap = 'Reds', 
-            m = senti_map,
-            tooltip=['Name',
-                    'Happy', 
-                    'Angry', 
-                    'Surprise', 
-                    'Sad', 
-                    'Fear'],
-                    scheme='BoxPlot')
 sad.explore(column = 'Sad', 
             cmap = 'Blues', 
             m = senti_map,
@@ -95,7 +85,18 @@ sad.explore(column = 'Sad',
                     'Surprise', 
                     'Sad', 
                     'Fear'],
-                    scheme='BoxPlot')
+            scheme='BoxPlot')
+fear.explore(column = 'Fear', 
+            cmap = 'Reds', 
+            m = senti_map,
+            tooltip=['Name',
+                    'Happy', 
+                    'Angry', 
+                    'Surprise', 
+                    'Sad', 
+                    'Fear'],
+            scheme='BoxPlot')
+                    
 surprise.explore(column = 'Surprise', 
             cmap = 'Greens', 
             m = senti_map,
@@ -105,7 +106,7 @@ surprise.explore(column = 'Surprise',
                     'Surprise', 
                     'Sad', 
                     'Fear'],
-                    scheme='BoxPlot')
+            scheme='BoxPlot')
 
 # %%
 senti_map.save('senti_map.html')
