@@ -8,5 +8,6 @@ app.listen(process.env.PORT || 3000, function() {
 
 // Make server send html page to browser
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '../Map/senti_map.html')
-  })
+  var path = require('path'); // so path string isn't seen as malicious
+  res.sendFile(path.resolve(__dirname + '/../Map/senti_map.html'))
+})
