@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "senti-map-a9660"
-  }
+    "default": "senti-map-a46cd",
+    "senti-map": "senti-map-a46cd"
+  },
+  "targets": {},
+  "etags": {}
 }
